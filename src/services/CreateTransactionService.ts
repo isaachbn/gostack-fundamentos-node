@@ -19,6 +19,12 @@ class CreateTransactionService {
       throw new Error('Transaction type must be income or outcome!');
     }
 
+    const balance = this.transactionsRepository.getBalance();
+
+    if (type === 'outcome' && balance.income - value < 0) {
+      throw new Error('your wallet has no balance!');
+    }
+
     return this.transactionsRepository.create({ title, value, type });
   }
 }
