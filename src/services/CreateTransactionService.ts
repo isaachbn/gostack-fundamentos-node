@@ -1,6 +1,12 @@
 import TransactionsRepository from '../repositories/TransactionsRepository';
 import Transaction from '../models/Transaction';
 
+interface CreateRequest {
+  title: string;
+  value: number;
+  type: string;
+}
+
 class CreateTransactionService {
   private transactionsRepository: TransactionsRepository;
 
@@ -8,8 +14,12 @@ class CreateTransactionService {
     this.transactionsRepository = transactionsRepository;
   }
 
-  public execute(): Transaction {
-    // TODO
+  public execute({ title, type, value }: CreateRequest): Transaction {
+    if (type !== 'income' && type !== 'outcome') {
+      throw new Error('Transaction type must be income or outcome!');
+    }
+
+    return this.transactionsRepository.create({ title, value, type });
   }
 }
 
